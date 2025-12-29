@@ -1,12 +1,12 @@
-package services
+package application
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/ilyasa1211/go-url-shortener/internal/dto"
-	"github.com/ilyasa1211/go-url-shortener/internal/entities"
-	"github.com/ilyasa1211/go-url-shortener/internal/interfaces"
+	"github.com/ilyasa1211/url-shortener-demo/internal/application/dto"
+	"github.com/ilyasa1211/url-shortener-demo/internal/domain"
+	"github.com/ilyasa1211/url-shortener-demo/internal/interfaces"
 )
 
 type SiteService struct {
@@ -17,7 +17,7 @@ func NewSiteService(rs interfaces.SiteRepository) *SiteService {
 	return &SiteService{rs}
 }
 
-func (s *SiteService) FindAll() *[]entities.Site {
+func (s *SiteService) FindAll() *[]domain.Site {
 	return s.rs.All()
 }
 func (s *SiteService) Create(r *http.Request) error {
@@ -27,7 +27,7 @@ func (s *SiteService) Create(r *http.Request) error {
 		return err
 	}
 
-	return s.rs.Create(&entities.Site{
+	return s.rs.Create(&domain.Site{
 		AliasUrl:  csr.AliasUrl,
 		TargetUrl: csr.TargetUrl,
 	})

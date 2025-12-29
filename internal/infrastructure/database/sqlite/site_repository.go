@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/ilyasa1211/go-url-shortener/internal/entities"
+	"github.com/ilyasa1211/url-shortener-demo/internal/domain"
 )
 
 type SiteRepository struct {
@@ -15,7 +15,7 @@ func NewSiteRepository(db *sql.DB) *SiteRepository {
 	return &SiteRepository{db}
 }
 
-func (ur *SiteRepository) All() *[]entities.Site {
+func (ur *SiteRepository) All() *[]domain.Site {
 	rows, err := ur.DB.Query("SELECT * FROM sites")
 
 	if err != nil {
@@ -24,11 +24,11 @@ func (ur *SiteRepository) All() *[]entities.Site {
 
 	defer rows.Close()
 
-	sites := make([]entities.Site, 0)
+	sites := make([]domain.Site, 0)
 	var i int
 
 	for rows.Next() {
-		var site entities.Site
+		var site domain.Site
 
 		if err := rows.Scan(&site.ID, &site.AliasUrl, &site.TargetUrl); err != nil {
 			fmt.Println(err)
@@ -40,7 +40,7 @@ func (ur *SiteRepository) All() *[]entities.Site {
 
 	return &sites
 }
-func (ur *SiteRepository) FindByAlias(aliasUrl string) (*entities.Site, error) {
+func (ur *SiteRepository) FindByAlias(aliasUrl string) (*domain.Site, error) {
 	rows, err := ur.DB.Query("SELECT * FROM sites WHERE alias_url = ? LIMIT 1", aliasUrl)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func (ur *SiteRepository) FindByAlias(aliasUrl string) (*entities.Site, error) {
 
 	defer rows.Close()
 
-	var site entities.Site
+	var site domain.Site
 
 	for rows.Next() {
 		rows.Scan(&site.ID, &site.AliasUrl, &site.TargetUrl)
@@ -58,7 +58,7 @@ func (ur *SiteRepository) FindByAlias(aliasUrl string) (*entities.Site, error) {
 	return &site, nil
 }
 
-func (ur *SiteRepository) Create(site *entities.Site) error {
+func (ur *SiteRepository) Create(site *domain.Site) error {
 	_, err := ur.DB.Exec("INSERT INTO sites (alias_url, target_url) VALUES (?, ?)", site.AliasUrl, site.TargetUrl)
 
 	if err != nil {

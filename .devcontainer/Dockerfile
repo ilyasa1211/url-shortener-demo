@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:1.24-bookworm
+FROM docker.io/library/golang:1.25-bookworm
 
 ARG USERNAME=dev
 ARG USER_UID=1000

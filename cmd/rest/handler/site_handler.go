@@ -1,21 +1,21 @@
-package http
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/ilyasa1211/go-url-shortener/internal/services"
+	application "github.com/ilyasa1211/url-shortener-demo/internal/application"
 )
 
 type SiteHandler struct {
-	s *services.SiteService
+	s *application.SiteService
 }
 type Response struct {
 	Data string `json:"data"`
 }
 
-func NewSiteHandler(s *services.SiteService) *SiteHandler {
+func NewSiteHandler(s *application.SiteService) *SiteHandler {
 	return &SiteHandler{s}
 }
 
@@ -26,7 +26,7 @@ func (h *SiteHandler) Index(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Request done")
 	}
 
-	w.Header().Set("Content-type", "application/json")
+	w.Header().Set("content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(sites)
 }
@@ -35,7 +35,7 @@ func (h *SiteHandler) Show(w http.ResponseWriter, r *http.Request) {
 	site, err := h.s.FindByAlias(r)
 
 	if err != nil {
-		w.Header().Set("Content-Type", "text/plain")
+		w.Header().Set("content-type", "text/plain")
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "Error occured %v", err)
 		return

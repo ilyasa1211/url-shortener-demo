@@ -1,4 +1,4 @@
-package entities
+package domain
 
 type Site struct {
 	ID        int    `json:"id"`
